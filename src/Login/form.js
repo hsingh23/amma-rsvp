@@ -2,20 +2,25 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import NameIcon from '@material-ui/icons/SupervisorAccount';
 import LockIcon from '@material-ui/icons/Lock';
 import EmailIcon from '@material-ui/icons/Email';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { withRouter } from 'react-router-dom';
+const errorLogger = error => {
+  console.error(error);
+  return error;
+};
 
-export const Form = props => {
+export const Form = withRouter(props => {
   const {
     values: { email, password },
     errors,
     touched,
-    handleSubmit,
     handleChange,
     isValid,
     setFieldTouched,
+    resetForm,
+    history,
   } = props;
 
   const change = (name, e) => {
@@ -26,27 +31,20 @@ export const Form = props => {
   };
   return (
     <form
-      onSubmit={() => {
-        alert('submitted');
+      onSubmit={e => {
+        e.preventDefault();
+        fetch('https://lists.ammagroups.org/test/login', { body: { email, password }, method: 'POST' })
+          .then(resp => resp.json(), errorLogger)
+          .then(resp => {
+            const apiKey = resp && resp.apiKey;
+            if (apiKey) {
+              localStorage.apiKey = apiKey;
+              resetForm();
+              history.push('/');
+            }
+          }, errorLogger);
       }}>
       <CssBaseline />
-      {/* <TextField
-        id="name"
-        name="name"
-        helperText={touched.name ? errors.name : ""}
-        error={touched.name && Boolean(errors.name)}
-        label="Name"
-        value={name}
-        onChange={change.bind(null, "name")}
-        fullWidth
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <NameIcon />
-            </InputAdornment>
-          )
-        }}
-      /> */}
       <TextField
         id="email"
         name="email"
@@ -82,27 +80,9 @@ export const Form = props => {
           ),
         }}
       />
-      {/* <TextField
-        id="confirmPassword"
-        name="confirmPassword"
-        helperText={touched.confirmPassword ? errors.confirmPassword : ""}
-        error={touched.confirmPassword && Boolean(errors.confirmPassword)}
-        label="Confirm Password"
-        fullWidth
-        type="password"
-        value={confirmPassword}
-        onChange={change.bind(null, "confirmPassword")}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <LockIcon />
-            </InputAdornment>
-          )
-        }}
-      /> */}
       <Button type="submit" fullWidth variant="contained" color="primary" disabled={!isValid}>
         Submit
       </Button>
     </form>
   );
-};
+});
