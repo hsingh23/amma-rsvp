@@ -6,7 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import SyncIcon from '@material-ui/icons/Sync';
 import { Link } from 'react-router-dom';
 import { bulkAdd } from './util';
 
@@ -30,7 +30,7 @@ function ButtonAppBar(props) {
       <AppBar position="static">
         <Toolbar>
           <IconButton className={classes.menuButton} color="white" aria-label="Menu" onClick={bulkAdd}>
-            <MenuIcon />
+            <SyncIcon />
           </IconButton>
           <Link to="/" className={classes.grow}>
             <Typography variant="h6" color="default">
