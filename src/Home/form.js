@@ -8,17 +8,19 @@ import NameIcon from '@material-ui/icons/SupervisorAccount';
 import LockIcon from '@material-ui/icons/Lock';
 import EmailIcon from '@material-ui/icons/Email';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Checkbox from '@material-ui/core/Checkbox';
+
 import localforage from 'localforage';
 
 export const Form = props => {
   const {
-    values: { firstName, lastName, email, zipcode, country },
+    values: { firstName, lastName, email, zipcode, country, agree },
     errors,
     touched,
-    handleSubmit,
     handleChange,
     isValid,
     setFieldTouched,
+    resetForm,
   } = props;
 
   const change = (name, e) => {
@@ -33,8 +35,18 @@ export const Form = props => {
       autoCorrect="off"
       autoCapitalize="none"
       spellCheck="false"
-      onSubmit={() => {
-        alert('submitted');
+      onSubmit={async e => {
+        e.preventDefault();
+        const pending = (await localforage.getItem('pendingRSVP')) || [];
+        pending.push({
+          firstName,
+          lastName,
+          email,
+          zipcode,
+          country,
+        });
+        localforage.setItem('pendingRSVP', pending);
+        resetForm();
       }}>
       <CssBaseline />
       <TextField
@@ -122,15 +134,7 @@ export const Form = props => {
           ),
         }}
       />
-      <Select
-        id="country"
-        name="country"
-        helperText={touched.country ? errors.country : ''}
-        error={touched.country && Boolean(errors.country)}
-        onChange={change.bind(null, 'country')}
-        label="Country"
-        fullWidth
-        value={country}>
+      <Select id="country" name="country" error={touched.country && Boolean(errors.country)} onChange={change.bind(null, 'country')} label="Country" fullWidth value={country}>
         <MenuItem value="US">United States</MenuItem>
         <MenuItem value="CA">Canada</MenuItem>
         <MenuItem value="AF">Afghanistan</MenuItem>
@@ -381,7 +385,8 @@ export const Form = props => {
         <MenuItem value="ZM">Zambia</MenuItem>
         <MenuItem value="ZW">Zimbabwe</MenuItem>
       </Select>
-      <Button type="submit" fullWidth variant="raised" color="primary" disabled={!isValid}>
+      <Checkbox id="agree" name="agree" error={touched.agree && Boolean(errors.agree)} onChange={change.bind(null, 'agree')} label="agree" checked={agree} />
+      <Button type="submit" fullWidth variant="contained" color="primary" disabled={!isValid}>
         Submit
       </Button>
     </form>

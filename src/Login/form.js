@@ -100,7 +100,7 @@ export const Form = props => {
           )
         }}
       /> */}
-      <Button type="submit" fullWidth variant="raised" color="primary" disabled={!isValid}>
+      <Button type="submit" fullWidth variant="contained" color="primary" disabled={!isValid}>
         Submit
       </Button>
     </form>

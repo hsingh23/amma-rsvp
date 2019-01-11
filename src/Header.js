@@ -8,7 +8,6 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { Link } from 'react-router-dom';
-import grey from '@material-ui/core/colors/grey';
 
 const styles = {
   root: {
@@ -33,12 +32,12 @@ function ButtonAppBar(props) {
             <MenuIcon />
           </IconButton>
           <Link to="/" className={classes.grow}>
-            <Typography variant="h6" color="red">
+            <Typography variant="h6" color="default">
               Amma RSVP
             </Typography>
           </Link>
           <Link to="/login">
-            <Button color={grey[50]}>Login</Button>
+            <Button color="default">Login</Button>
           </Link>
         </Toolbar>
       </AppBar>
