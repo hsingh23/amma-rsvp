@@ -34,7 +34,7 @@ class InputForm extends Component {
 
   render() {
     const { classes } = this.props;
-    const values = { email: '', firstName: '', lastName: '', zipcode: '', country: '', agree: false };
+    const values = { email: '', firstName: '', lastName: '', zipcode: '', country: 'US', agree: true };
     return (
       <React.Fragment>
         <div className={classes.container}>
