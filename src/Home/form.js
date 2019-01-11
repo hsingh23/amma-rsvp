@@ -5,10 +5,12 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import NameIcon from '@material-ui/icons/SupervisorAccount';
-import LockIcon from '@material-ui/icons/Lock';
+import HomeIcon from '@material-ui/icons/Home';
 import EmailIcon from '@material-ui/icons/Email';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Checkbox from '@material-ui/core/Checkbox';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Select from 'react-select';
 
 import localforage from 'localforage';
@@ -384,26 +386,34 @@ export const Form = props => {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <LockIcon />
+              <HomeIcon />
             </InputAdornment>
           ),
         }}
       />
-      <Select
-        label="Country"
-        id="country"
-        name="country"
-        error={touched.country && Boolean(errors.country)}
-        onChange={({ value }) => {
-          setFieldValue('country', value);
-          setFieldTouched('country', true, false);
-        }}
-        value={country ? countries.find(o => o.value === country) : ''}
-        ignoreCase
-        autoBlur
-        options={countries}
-      />
-      <Checkbox id="agree" name="agree" error={touched.agree && Boolean(errors.agree)} onChange={change.bind(null, 'agree')} label="agree" checked={agree} />
+
+      <div style={{ margin: '5px 0' }}>
+        <Select
+          label="Country"
+          id="country"
+          name="country"
+          error={touched.country && Boolean(errors.country)}
+          onChange={({ value }) => {
+            setFieldValue('country', value);
+            setFieldTouched('country', true, false);
+          }}
+          value={country ? countries.find(o => o.value === country) : ''}
+          ignoreCase
+          autoBlur
+          options={countries}
+        />
+      </div>
+      <FormGroup row>
+        <FormControlLabel
+          control={<Checkbox id="agree" name="agree" error={touched.agree && Boolean(errors.agree)} onChange={change.bind(null, 'agree')} checked={agree} />}
+          label="I agree to recieve email communication from Amma Groups site"
+        />
+      </FormGroup>
       <Button type="submit" fullWidth variant="contained" color="primary" disabled={!isValid}>
         Submit
       </Button>
