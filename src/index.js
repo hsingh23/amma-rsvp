@@ -5,9 +5,15 @@ import Login from './Login/index';
 import Home from './Home/index';
 import Header from './Header';
 import './styles.css';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import * as serviceWorker from './serviceWorker';
-serviceWorker.register();
+import localforage from 'localforage';
+
+localforage.config({
+  driver: [localforage.INDEXEDDB, localforage.LOCALSTORAGE],
+  name: 'rsvp',
+  storeName: 'rsvp',
+});
 
 class App extends Component {
   render() {
@@ -27,3 +33,5 @@ class App extends Component {
 
 const rootElement = document.getElementById('root');
 ReactDOM.render(<App />, rootElement);
+
+serviceWorker.register();

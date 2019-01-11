@@ -23,6 +23,7 @@ const validationSchema = Yup.object({
   lastName: Yup.string('Enter your Last Name').required('Last Name is required'),
   zipcode: Yup.string('Enter your Zipcode').required('Zipcode is required'),
   country: Yup.string('Enter your Country').required('Country is required'),
+  agree: Yup.boolean().oneOf([true], 'Must Accept Terms and Conditions'),
 });
 
 class InputForm extends Component {
@@ -33,7 +34,7 @@ class InputForm extends Component {
 
   render() {
     const { classes } = this.props;
-    const values = { email: '', firstName: '', lastName: '', zipcode: '', country: '' };
+    const values = { email: '', firstName: '', lastName: '', zipcode: '', country: '', agree: false };
     return (
       <React.Fragment>
         <div className={classes.container}>
