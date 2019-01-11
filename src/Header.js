@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import SyncIcon from '@material-ui/icons/Sync';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { bulkAdd } from './util';
 
 const styles = {
@@ -29,17 +29,30 @@ function ButtonAppBar(props) {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton className={classes.menuButton} color="white" aria-label="Menu" onClick={bulkAdd}>
+          <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={bulkAdd}>
             <SyncIcon />
           </IconButton>
-          <Link to="/" className={classes.grow}>
-            <Typography variant="h6" color="default">
+          <NavLink
+            to="/"
+            className={classes.grow}
+            activeStyle={{
+              fontWeight: 'bold',
+              color: 'inherit',
+              textDecoration: 'inherit',
+            }}>
+            <Typography variant="h6" color="inherit">
               Amma RSVP
             </Typography>
-          </Link>
-          <Link to="/login">
-            <Button color="default">Login</Button>
-          </Link>
+          </NavLink>
+          <NavLink
+            to="/login"
+            style={{
+              fontWeight: 'bold',
+              color: 'inherit',
+              textDecoration: 'inherit',
+            }}>
+            <Button color="inherit">Login</Button>
+          </NavLink>
         </Toolbar>
       </AppBar>
     </div>
