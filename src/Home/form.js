@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
+// import MenuItem from '@material-ui/core/MenuItem';
+// import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import NameIcon from '@material-ui/icons/SupervisorAccount';
@@ -9,8 +9,262 @@ import LockIcon from '@material-ui/icons/Lock';
 import EmailIcon from '@material-ui/icons/Email';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Checkbox from '@material-ui/core/Checkbox';
+import Select from 'react-select';
 
 import localforage from 'localforage';
+import { bulkAdd } from '../util';
+
+const countries = [
+  { value: 'US', label: 'United States' },
+  { value: 'CA', label: 'Canada' },
+  { value: 'AF', label: 'Afghanistan' },
+  { value: 'AX', label: 'Åland Islands' },
+  { value: 'AL', label: 'Albania' },
+  { value: 'DZ', label: 'Algeria' },
+  { value: 'AS', label: 'American Samoa' },
+  { value: 'AD', label: 'Andorra' },
+  { value: 'AO', label: 'Angola' },
+  { value: 'AI', label: 'Anguilla' },
+  { value: 'AQ', label: 'Antarctica' },
+  { value: 'AG', label: 'Antigua and Barbuda' },
+  { value: 'AR', label: 'Argentina' },
+  { value: 'AM', label: 'Armenia' },
+  { value: 'AW', label: 'Aruba' },
+  { value: 'AU', label: 'Australia' },
+  { value: 'AT', label: 'Austria' },
+  { value: 'AZ', label: 'Azerbaijan' },
+  { value: 'BS', label: 'Bahamas' },
+  { value: 'BH', label: 'Bahrain' },
+  { value: 'BD', label: 'Bangladesh' },
+  { value: 'BB', label: 'Barbados' },
+  { value: 'BY', label: 'Belarus' },
+  { value: 'BE', label: 'Belgium' },
+  { value: 'BZ', label: 'Belize' },
+  { value: 'BJ', label: 'Benin' },
+  { value: 'BM', label: 'Bermuda' },
+  { value: 'BT', label: 'Bhutan' },
+  { value: 'BO', label: 'Bolivia, Plurinational State of' },
+  { value: 'BQ', label: 'Bonaire, Sint Eustatius and Saba' },
+  { value: 'BA', label: 'Bosnia and Herzegovina' },
+  { value: 'BW', label: 'Botswana' },
+  { value: 'BV', label: 'Bouvet Island' },
+  { value: 'BR', label: 'Brazil' },
+  { value: 'IO', label: 'British Indian Ocean Territory' },
+  { value: 'BN', label: 'Brunei Darussalam' },
+  { value: 'BG', label: 'Bulgaria' },
+  { value: 'BF', label: 'Burkina Faso' },
+  { value: 'BI', label: 'Burundi' },
+  { value: 'KH', label: 'Cambodia' },
+  { value: 'CM', label: 'Cameroon' },
+  { value: 'CV', label: 'Cape Verde' },
+  { value: 'KY', label: 'Cayman Islands' },
+  { value: 'CF', label: 'Central African Republic' },
+  { value: 'TD', label: 'Chad' },
+  { value: 'CL', label: 'Chile' },
+  { value: 'CN', label: 'China' },
+  { value: 'CX', label: 'Christmas Island' },
+  { value: 'CC', label: 'Cocos (Keeling) Islands' },
+  { value: 'CO', label: 'Colombia' },
+  { value: 'KM', label: 'Comoros' },
+  { value: 'CG', label: 'Congo' },
+  { value: 'CD', label: 'Congo, the Democratic Republic of the' },
+  { value: 'CK', label: 'Cook Islands' },
+  { value: 'CR', label: 'Costa Rica' },
+  { value: 'CI', label: 'Côte dIvoire' },
+  { value: 'HR', label: 'Croatia' },
+  { value: 'CU', label: 'Cuba' },
+  { value: 'CW', label: 'Curaçao' },
+  { value: 'CY', label: 'Cyprus' },
+  { value: 'CZ', label: 'Czech Republic' },
+  { value: 'DK', label: 'Denmark' },
+  { value: 'DJ', label: 'Djibouti' },
+  { value: 'DM', label: 'Dominica' },
+  { value: 'DO', label: 'Dominican Republic' },
+  { value: 'EC', label: 'Ecuador' },
+  { value: 'EG', label: 'Egypt' },
+  { value: 'SV', label: 'El Salvador' },
+  { value: 'GQ', label: 'Equatorial Guinea' },
+  { value: 'ER', label: 'Eritrea' },
+  { value: 'EE', label: 'Estonia' },
+  { value: 'ET', label: 'Ethiopia' },
+  { value: 'FK', label: 'Falkland Islands (Malvinas)' },
+  { value: 'FO', label: 'Faroe Islands' },
+  { value: 'FJ', label: 'Fiji' },
+  { value: 'FI', label: 'Finland' },
+  { value: 'FR', label: 'France' },
+  { value: 'GF', label: 'French Guiana' },
+  { value: 'PF', label: 'French Polynesia' },
+  { value: 'TF', label: 'French Southern Territories' },
+  { value: 'GA', label: 'Gabon' },
+  { value: 'GM', label: 'Gambia' },
+  { value: 'GE', label: 'Georgia' },
+  { value: 'DE', label: 'Germany' },
+  { value: 'GH', label: 'Ghana' },
+  { value: 'GI', label: 'Gibraltar' },
+  { value: 'GR', label: 'Greece' },
+  { value: 'GL', label: 'Greenland' },
+  { value: 'GD', label: 'Grenada' },
+  { value: 'GP', label: 'Guadeloupe' },
+  { value: 'GU', label: 'Guam' },
+  { value: 'GT', label: 'Guatemala' },
+  { value: 'GG', label: 'Guernsey' },
+  { value: 'GN', label: 'Guinea' },
+  { value: 'GW', label: 'Guinea-Bissau' },
+  { value: 'GY', label: 'Guyana' },
+  { value: 'HT', label: 'Haiti' },
+  { value: 'HM', label: 'Heard Island and McDonald Islands' },
+  { value: 'VA', label: 'Holy See (Vatican City State)' },
+  { value: 'HN', label: 'Honduras' },
+  { value: 'HK', label: 'Hong Kong' },
+  { value: 'HU', label: 'Hungary' },
+  { value: 'IS', label: 'Iceland' },
+  { value: 'IN', label: 'India' },
+  { value: 'ID', label: 'Indonesia' },
+  { value: 'IR', label: 'Iran, Islamic Republic of' },
+  { value: 'IQ', label: 'Iraq' },
+  { value: 'IE', label: 'Ireland' },
+  { value: 'IM', label: 'Isle of Man' },
+  { value: 'IL', label: 'Israel' },
+  { value: 'IT', label: 'Italy' },
+  { value: 'JM', label: 'Jamaica' },
+  { value: 'JP', label: 'Japan' },
+  { value: 'JE', label: 'Jersey' },
+  { value: 'JO', label: 'Jordan' },
+  { value: 'KZ', label: 'Kazakhstan' },
+  { value: 'KE', label: 'Kenya' },
+  { value: 'KI', label: 'Kiribati' },
+  { value: 'KP', label: 'Korea, Democratic Peoples Republic of' },
+  { value: 'KR', label: 'Korea, Republic of' },
+  { value: 'KW', label: 'Kuwait' },
+  { value: 'KG', label: 'Kyrgyzstan' },
+  { value: 'LA', label: 'Lao Peoples Democratic Republic' },
+  { value: 'LV', label: 'Latvia' },
+  { value: 'LB', label: 'Lebanon' },
+  { value: 'LS', label: 'Lesotho' },
+  { value: 'LR', label: 'Liberia' },
+  { value: 'LY', label: 'Libya' },
+  { value: 'LI', label: 'Liechtenstein' },
+  { value: 'LT', label: 'Lithuania' },
+  { value: 'LU', label: 'Luxembourg' },
+  { value: 'MO', label: 'Macao' },
+  { value: 'MK', label: 'Macedonia, the former Yugoslav Republic of' },
+  { value: 'MG', label: 'Madagascar' },
+  { value: 'MW', label: 'Malawi' },
+  { value: 'MY', label: 'Malaysia' },
+  { value: 'MV', label: 'Maldives' },
+  { value: 'ML', label: 'Mali' },
+  { value: 'MT', label: 'Malta' },
+  { value: 'MH', label: 'Marshall Islands' },
+  { value: 'MQ', label: 'Martinique' },
+  { value: 'MR', label: 'Mauritania' },
+  { value: 'MU', label: 'Mauritius' },
+  { value: 'YT', label: 'Mayotte' },
+  { value: 'MX', label: 'Mexico' },
+  { value: 'FM', label: 'Micronesia, Federated States of' },
+  { value: 'MD', label: 'Moldova, Republic of' },
+  { value: 'MC', label: 'Monaco' },
+  { value: 'MN', label: 'Mongolia' },
+  { value: 'ME', label: 'Montenegro' },
+  { value: 'MS', label: 'Montserrat' },
+  { value: 'MA', label: 'Morocco' },
+  { value: 'MZ', label: 'Mozambique' },
+  { value: 'MM', label: 'Myanmar' },
+  { value: 'NA', label: 'Namibia' },
+  { value: 'NR', label: 'Nauru' },
+  { value: 'NP', label: 'Nepal' },
+  { value: 'NL', label: 'Netherlands' },
+  { value: 'NC', label: 'New Caledonia' },
+  { value: 'NZ', label: 'New Zealand' },
+  { value: 'NI', label: 'Nicaragua' },
+  { value: 'NE', label: 'Niger' },
+  { value: 'NG', label: 'Nigeria' },
+  { value: 'NU', label: 'Niue' },
+  { value: 'NF', label: 'Norfolk Island' },
+  { value: 'MP', label: 'Northern Mariana Islands' },
+  { value: 'NO', label: 'Norway' },
+  { value: 'OM', label: 'Oman' },
+  { value: 'PK', label: 'Pakistan' },
+  { value: 'PW', label: 'Palau' },
+  { value: 'PS', label: 'Palestinian Territory, Occupied' },
+  { value: 'PA', label: 'Panama' },
+  { value: 'PG', label: 'Papua New Guinea' },
+  { value: 'PY', label: 'Paraguay' },
+  { value: 'PE', label: 'Peru' },
+  { value: 'PH', label: 'Philippines' },
+  { value: 'PN', label: 'Pitcairn' },
+  { value: 'PL', label: 'Poland' },
+  { value: 'PT', label: 'Portugal' },
+  { value: 'PR', label: 'Puerto Rico' },
+  { value: 'QA', label: 'Qatar' },
+  { value: 'RE', label: 'Réunion' },
+  { value: 'RO', label: 'Romania' },
+  { value: 'RU', label: 'Russian Federation' },
+  { value: 'RW', label: 'Rwanda' },
+  { value: 'BL', label: 'Saint Barthélemy' },
+  { value: 'SH', label: 'Saint Helena, Ascension and Tristan da Cunha' },
+  { value: 'KN', label: 'Saint Kitts and Nevis' },
+  { value: 'LC', label: 'Saint Lucia' },
+  { value: 'MF', label: 'Saint Martin (French part)' },
+  { value: 'PM', label: 'Saint Pierre and Miquelon' },
+  { value: 'VC', label: 'Saint Vincent and the Grenadines' },
+  { value: 'WS', label: 'Samoa' },
+  { value: 'SM', label: 'San Marino' },
+  { value: 'ST', label: 'Sao Tome and Principe' },
+  { value: 'SA', label: 'Saudi Arabia' },
+  { value: 'SN', label: 'Senegal' },
+  { value: 'RS', label: 'Serbia' },
+  { value: 'SC', label: 'Seychelles' },
+  { value: 'SL', label: 'Sierra Leone' },
+  { value: 'SG', label: 'Singapore' },
+  { value: 'SX', label: 'Sint Maarten (Dutch part)' },
+  { value: 'SK', label: 'Slovakia' },
+  { value: 'SI', label: 'Slovenia' },
+  { value: 'SB', label: 'Solomon Islands' },
+  { value: 'SO', label: 'Somalia' },
+  { value: 'ZA', label: 'South Africa' },
+  { value: 'GS', label: 'South Georgia and the South Sandwich Islands' },
+  { value: 'SS', label: 'South Sudan' },
+  { value: 'ES', label: 'Spain' },
+  { value: 'LK', label: 'Sri Lanka' },
+  { value: 'SD', label: 'Sudan' },
+  { value: 'SR', label: 'Suriname' },
+  { value: 'SJ', label: 'Svalbard and Jan Mayen' },
+  { value: 'SZ', label: 'Swaziland' },
+  { value: 'SE', label: 'Sweden' },
+  { value: 'CH', label: 'Switzerland' },
+  { value: 'SY', label: 'Syrian Arab Republic' },
+  { value: 'TW', label: 'Taiwan, Province of China' },
+  { value: 'TJ', label: 'Tajikistan' },
+  { value: 'TZ', label: 'Tanzania, United Republic of' },
+  { value: 'TH', label: 'Thailand' },
+  { value: 'TL', label: 'Timor-Leste' },
+  { value: 'TG', label: 'Togo' },
+  { value: 'TK', label: 'Tokelau' },
+  { value: 'TO', label: 'Tonga' },
+  { value: 'TT', label: 'Trinidad and Tobago' },
+  { value: 'TN', label: 'Tunisia' },
+  { value: 'TR', label: 'Turkey' },
+  { value: 'TM', label: 'Turkmenistan' },
+  { value: 'TC', label: 'Turks and Caicos Islands' },
+  { value: 'TV', label: 'Tuvalu' },
+  { value: 'UG', label: 'Uganda' },
+  { value: 'UA', label: 'Ukraine' },
+  { value: 'AE', label: 'United Arab Emirates' },
+  { value: 'GB', label: 'United Kingdom' },
+  { value: 'UM', label: 'United States Minor Outlying Islands' },
+  { value: 'UY', label: 'Uruguay' },
+  { value: 'UZ', label: 'Uzbekistan' },
+  { value: 'VU', label: 'Vanuatu' },
+  { value: 'VE', label: 'Venezuela, Bolivarian Republic of' },
+  { value: 'VN', label: 'Viet Nam' },
+  { value: 'VG', label: 'Virgin Islands, British' },
+  { value: 'VI', label: 'Virgin Islands, U.S.' },
+  { value: 'WF', label: 'Wallis and Futuna' },
+  { value: 'EH', label: 'Western Sahara' },
+  { value: 'YE', label: 'Yemen' },
+  { value: 'ZM', label: 'Zambia' },
+  { value: 'ZW', label: 'Zimbabwe' },
+];
 
 export const Form = props => {
   const {
@@ -21,12 +275,12 @@ export const Form = props => {
     isValid,
     setFieldTouched,
     resetForm,
+    setFieldValue,
   } = props;
 
   const change = (name, e) => {
     e.persist();
     handleChange(e);
-    console.log(errors);
     setFieldTouched(name, true, false);
   };
   return (
@@ -45,7 +299,8 @@ export const Form = props => {
           zipcode,
           country,
         });
-        localforage.setItem('pendingRSVP', pending);
+        await localforage.setItem('pendingRSVP', pending);
+        await bulkAdd();
         resetForm();
       }}>
       <CssBaseline />
@@ -134,257 +389,20 @@ export const Form = props => {
           ),
         }}
       />
-      <Select id="country" name="country" error={touched.country && Boolean(errors.country)} onChange={change.bind(null, 'country')} label="Country" fullWidth value={country}>
-        <MenuItem value="US">United States</MenuItem>
-        <MenuItem value="CA">Canada</MenuItem>
-        <MenuItem value="AF">Afghanistan</MenuItem>
-        <MenuItem value="AX">Åland Islands</MenuItem>
-        <MenuItem value="AL">Albania</MenuItem>
-        <MenuItem value="DZ">Algeria</MenuItem>
-        <MenuItem value="AS">American Samoa</MenuItem>
-        <MenuItem value="AD">Andorra</MenuItem>
-        <MenuItem value="AO">Angola</MenuItem>
-        <MenuItem value="AI">Anguilla</MenuItem>
-        <MenuItem value="AQ">Antarctica</MenuItem>
-        <MenuItem value="AG">Antigua and Barbuda</MenuItem>
-        <MenuItem value="AR">Argentina</MenuItem>
-        <MenuItem value="AM">Armenia</MenuItem>
-        <MenuItem value="AW">Aruba</MenuItem>
-        <MenuItem value="AU">Australia</MenuItem>
-        <MenuItem value="AT">Austria</MenuItem>
-        <MenuItem value="AZ">Azerbaijan</MenuItem>
-        <MenuItem value="BS">Bahamas</MenuItem>
-        <MenuItem value="BH">Bahrain</MenuItem>
-        <MenuItem value="BD">Bangladesh</MenuItem>
-        <MenuItem value="BB">Barbados</MenuItem>
-        <MenuItem value="BY">Belarus</MenuItem>
-        <MenuItem value="BE">Belgium</MenuItem>
-        <MenuItem value="BZ">Belize</MenuItem>
-        <MenuItem value="BJ">Benin</MenuItem>
-        <MenuItem value="BM">Bermuda</MenuItem>
-        <MenuItem value="BT">Bhutan</MenuItem>
-        <MenuItem value="BO">Bolivia, Plurinational State of</MenuItem>
-        <MenuItem value="BQ">Bonaire, Sint Eustatius and Saba</MenuItem>
-        <MenuItem value="BA">Bosnia and Herzegovina</MenuItem>
-        <MenuItem value="BW">Botswana</MenuItem>
-        <MenuItem value="BV">Bouvet Island</MenuItem>
-        <MenuItem value="BR">Brazil</MenuItem>
-        <MenuItem value="IO">British Indian Ocean Territory</MenuItem>
-        <MenuItem value="BN">Brunei Darussalam</MenuItem>
-        <MenuItem value="BG">Bulgaria</MenuItem>
-        <MenuItem value="BF">Burkina Faso</MenuItem>
-        <MenuItem value="BI">Burundi</MenuItem>
-        <MenuItem value="KH">Cambodia</MenuItem>
-        <MenuItem value="CM">Cameroon</MenuItem>
-        <MenuItem value="CV">Cape Verde</MenuItem>
-        <MenuItem value="KY">Cayman Islands</MenuItem>
-        <MenuItem value="CF">Central African Republic</MenuItem>
-        <MenuItem value="TD">Chad</MenuItem>
-        <MenuItem value="CL">Chile</MenuItem>
-        <MenuItem value="CN">China</MenuItem>
-        <MenuItem value="CX">Christmas Island</MenuItem>
-        <MenuItem value="CC">Cocos (Keeling) Islands</MenuItem>
-        <MenuItem value="CO">Colombia</MenuItem>
-        <MenuItem value="KM">Comoros</MenuItem>
-        <MenuItem value="CG">Congo</MenuItem>
-        <MenuItem value="CD">Congo, the Democratic Republic of the</MenuItem>
-        <MenuItem value="CK">Cook Islands</MenuItem>
-        <MenuItem value="CR">Costa Rica</MenuItem>
-        <MenuItem value="CI">Côte d'Ivoire</MenuItem>
-        <MenuItem value="HR">Croatia</MenuItem>
-        <MenuItem value="CU">Cuba</MenuItem>
-        <MenuItem value="CW">Curaçao</MenuItem>
-        <MenuItem value="CY">Cyprus</MenuItem>
-        <MenuItem value="CZ">Czech Republic</MenuItem>
-        <MenuItem value="DK">Denmark</MenuItem>
-        <MenuItem value="DJ">Djibouti</MenuItem>
-        <MenuItem value="DM">Dominica</MenuItem>
-        <MenuItem value="DO">Dominican Republic</MenuItem>
-        <MenuItem value="EC">Ecuador</MenuItem>
-        <MenuItem value="EG">Egypt</MenuItem>
-        <MenuItem value="SV">El Salvador</MenuItem>
-        <MenuItem value="GQ">Equatorial Guinea</MenuItem>
-        <MenuItem value="ER">Eritrea</MenuItem>
-        <MenuItem value="EE">Estonia</MenuItem>
-        <MenuItem value="ET">Ethiopia</MenuItem>
-        <MenuItem value="FK">Falkland Islands (Malvinas)</MenuItem>
-        <MenuItem value="FO">Faroe Islands</MenuItem>
-        <MenuItem value="FJ">Fiji</MenuItem>
-        <MenuItem value="FI">Finland</MenuItem>
-        <MenuItem value="FR">France</MenuItem>
-        <MenuItem value="GF">French Guiana</MenuItem>
-        <MenuItem value="PF">French Polynesia</MenuItem>
-        <MenuItem value="TF">French Southern Territories</MenuItem>
-        <MenuItem value="GA">Gabon</MenuItem>
-        <MenuItem value="GM">Gambia</MenuItem>
-        <MenuItem value="GE">Georgia</MenuItem>
-        <MenuItem value="DE">Germany</MenuItem>
-        <MenuItem value="GH">Ghana</MenuItem>
-        <MenuItem value="GI">Gibraltar</MenuItem>
-        <MenuItem value="GR">Greece</MenuItem>
-        <MenuItem value="GL">Greenland</MenuItem>
-        <MenuItem value="GD">Grenada</MenuItem>
-        <MenuItem value="GP">Guadeloupe</MenuItem>
-        <MenuItem value="GU">Guam</MenuItem>
-        <MenuItem value="GT">Guatemala</MenuItem>
-        <MenuItem value="GG">Guernsey</MenuItem>
-        <MenuItem value="GN">Guinea</MenuItem>
-        <MenuItem value="GW">Guinea-Bissau</MenuItem>
-        <MenuItem value="GY">Guyana</MenuItem>
-        <MenuItem value="HT">Haiti</MenuItem>
-        <MenuItem value="HM">Heard Island and McDonald Islands</MenuItem>
-        <MenuItem value="VA">Holy See (Vatican City State)</MenuItem>
-        <MenuItem value="HN">Honduras</MenuItem>
-        <MenuItem value="HK">Hong Kong</MenuItem>
-        <MenuItem value="HU">Hungary</MenuItem>
-        <MenuItem value="IS">Iceland</MenuItem>
-        <MenuItem value="IN">India</MenuItem>
-        <MenuItem value="ID">Indonesia</MenuItem>
-        <MenuItem value="IR">Iran, Islamic Republic of</MenuItem>
-        <MenuItem value="IQ">Iraq</MenuItem>
-        <MenuItem value="IE">Ireland</MenuItem>
-        <MenuItem value="IM">Isle of Man</MenuItem>
-        <MenuItem value="IL">Israel</MenuItem>
-        <MenuItem value="IT">Italy</MenuItem>
-        <MenuItem value="JM">Jamaica</MenuItem>
-        <MenuItem value="JP">Japan</MenuItem>
-        <MenuItem value="JE">Jersey</MenuItem>
-        <MenuItem value="JO">Jordan</MenuItem>
-        <MenuItem value="KZ">Kazakhstan</MenuItem>
-        <MenuItem value="KE">Kenya</MenuItem>
-        <MenuItem value="KI">Kiribati</MenuItem>
-        <MenuItem value="KP">Korea, Democratic People's Republic of</MenuItem>
-        <MenuItem value="KR">Korea, Republic of</MenuItem>
-        <MenuItem value="KW">Kuwait</MenuItem>
-        <MenuItem value="KG">Kyrgyzstan</MenuItem>
-        <MenuItem value="LA">Lao People's Democratic Republic</MenuItem>
-        <MenuItem value="LV">Latvia</MenuItem>
-        <MenuItem value="LB">Lebanon</MenuItem>
-        <MenuItem value="LS">Lesotho</MenuItem>
-        <MenuItem value="LR">Liberia</MenuItem>
-        <MenuItem value="LY">Libya</MenuItem>
-        <MenuItem value="LI">Liechtenstein</MenuItem>
-        <MenuItem value="LT">Lithuania</MenuItem>
-        <MenuItem value="LU">Luxembourg</MenuItem>
-        <MenuItem value="MO">Macao</MenuItem>
-        <MenuItem value="MK">Macedonia, the former Yugoslav Republic of</MenuItem>
-        <MenuItem value="MG">Madagascar</MenuItem>
-        <MenuItem value="MW">Malawi</MenuItem>
-        <MenuItem value="MY">Malaysia</MenuItem>
-        <MenuItem value="MV">Maldives</MenuItem>
-        <MenuItem value="ML">Mali</MenuItem>
-        <MenuItem value="MT">Malta</MenuItem>
-        <MenuItem value="MH">Marshall Islands</MenuItem>
-        <MenuItem value="MQ">Martinique</MenuItem>
-        <MenuItem value="MR">Mauritania</MenuItem>
-        <MenuItem value="MU">Mauritius</MenuItem>
-        <MenuItem value="YT">Mayotte</MenuItem>
-        <MenuItem value="MX">Mexico</MenuItem>
-        <MenuItem value="FM">Micronesia, Federated States of</MenuItem>
-        <MenuItem value="MD">Moldova, Republic of</MenuItem>
-        <MenuItem value="MC">Monaco</MenuItem>
-        <MenuItem value="MN">Mongolia</MenuItem>
-        <MenuItem value="ME">Montenegro</MenuItem>
-        <MenuItem value="MS">Montserrat</MenuItem>
-        <MenuItem value="MA">Morocco</MenuItem>
-        <MenuItem value="MZ">Mozambique</MenuItem>
-        <MenuItem value="MM">Myanmar</MenuItem>
-        <MenuItem value="NA">Namibia</MenuItem>
-        <MenuItem value="NR">Nauru</MenuItem>
-        <MenuItem value="NP">Nepal</MenuItem>
-        <MenuItem value="NL">Netherlands</MenuItem>
-        <MenuItem value="NC">New Caledonia</MenuItem>
-        <MenuItem value="NZ">New Zealand</MenuItem>
-        <MenuItem value="NI">Nicaragua</MenuItem>
-        <MenuItem value="NE">Niger</MenuItem>
-        <MenuItem value="NG">Nigeria</MenuItem>
-        <MenuItem value="NU">Niue</MenuItem>
-        <MenuItem value="NF">Norfolk Island</MenuItem>
-        <MenuItem value="MP">Northern Mariana Islands</MenuItem>
-        <MenuItem value="NO">Norway</MenuItem>
-        <MenuItem value="OM">Oman</MenuItem>
-        <MenuItem value="PK">Pakistan</MenuItem>
-        <MenuItem value="PW">Palau</MenuItem>
-        <MenuItem value="PS">Palestinian Territory, Occupied</MenuItem>
-        <MenuItem value="PA">Panama</MenuItem>
-        <MenuItem value="PG">Papua New Guinea</MenuItem>
-        <MenuItem value="PY">Paraguay</MenuItem>
-        <MenuItem value="PE">Peru</MenuItem>
-        <MenuItem value="PH">Philippines</MenuItem>
-        <MenuItem value="PN">Pitcairn</MenuItem>
-        <MenuItem value="PL">Poland</MenuItem>
-        <MenuItem value="PT">Portugal</MenuItem>
-        <MenuItem value="PR">Puerto Rico</MenuItem>
-        <MenuItem value="QA">Qatar</MenuItem>
-        <MenuItem value="RE">Réunion</MenuItem>
-        <MenuItem value="RO">Romania</MenuItem>
-        <MenuItem value="RU">Russian Federation</MenuItem>
-        <MenuItem value="RW">Rwanda</MenuItem>
-        <MenuItem value="BL">Saint Barthélemy</MenuItem>
-        <MenuItem value="SH">Saint Helena, Ascension and Tristan da Cunha</MenuItem>
-        <MenuItem value="KN">Saint Kitts and Nevis</MenuItem>
-        <MenuItem value="LC">Saint Lucia</MenuItem>
-        <MenuItem value="MF">Saint Martin (French part)</MenuItem>
-        <MenuItem value="PM">Saint Pierre and Miquelon</MenuItem>
-        <MenuItem value="VC">Saint Vincent and the Grenadines</MenuItem>
-        <MenuItem value="WS">Samoa</MenuItem>
-        <MenuItem value="SM">San Marino</MenuItem>
-        <MenuItem value="ST">Sao Tome and Principe</MenuItem>
-        <MenuItem value="SA">Saudi Arabia</MenuItem>
-        <MenuItem value="SN">Senegal</MenuItem>
-        <MenuItem value="RS">Serbia</MenuItem>
-        <MenuItem value="SC">Seychelles</MenuItem>
-        <MenuItem value="SL">Sierra Leone</MenuItem>
-        <MenuItem value="SG">Singapore</MenuItem>
-        <MenuItem value="SX">Sint Maarten (Dutch part)</MenuItem>
-        <MenuItem value="SK">Slovakia</MenuItem>
-        <MenuItem value="SI">Slovenia</MenuItem>
-        <MenuItem value="SB">Solomon Islands</MenuItem>
-        <MenuItem value="SO">Somalia</MenuItem>
-        <MenuItem value="ZA">South Africa</MenuItem>
-        <MenuItem value="GS">South Georgia and the South Sandwich Islands</MenuItem>
-        <MenuItem value="SS">South Sudan</MenuItem>
-        <MenuItem value="ES">Spain</MenuItem>
-        <MenuItem value="LK">Sri Lanka</MenuItem>
-        <MenuItem value="SD">Sudan</MenuItem>
-        <MenuItem value="SR">Suriname</MenuItem>
-        <MenuItem value="SJ">Svalbard and Jan Mayen</MenuItem>
-        <MenuItem value="SZ">Swaziland</MenuItem>
-        <MenuItem value="SE">Sweden</MenuItem>
-        <MenuItem value="CH">Switzerland</MenuItem>
-        <MenuItem value="SY">Syrian Arab Republic</MenuItem>
-        <MenuItem value="TW">Taiwan, Province of China</MenuItem>
-        <MenuItem value="TJ">Tajikistan</MenuItem>
-        <MenuItem value="TZ">Tanzania, United Republic of</MenuItem>
-        <MenuItem value="TH">Thailand</MenuItem>
-        <MenuItem value="TL">Timor-Leste</MenuItem>
-        <MenuItem value="TG">Togo</MenuItem>
-        <MenuItem value="TK">Tokelau</MenuItem>
-        <MenuItem value="TO">Tonga</MenuItem>
-        <MenuItem value="TT">Trinidad and Tobago</MenuItem>
-        <MenuItem value="TN">Tunisia</MenuItem>
-        <MenuItem value="TR">Turkey</MenuItem>
-        <MenuItem value="TM">Turkmenistan</MenuItem>
-        <MenuItem value="TC">Turks and Caicos Islands</MenuItem>
-        <MenuItem value="TV">Tuvalu</MenuItem>
-        <MenuItem value="UG">Uganda</MenuItem>
-        <MenuItem value="UA">Ukraine</MenuItem>
-        <MenuItem value="AE">United Arab Emirates</MenuItem>
-        <MenuItem value="GB">United Kingdom</MenuItem>
-        <MenuItem value="UM">United States Minor Outlying Islands</MenuItem>
-        <MenuItem value="UY">Uruguay</MenuItem>
-        <MenuItem value="UZ">Uzbekistan</MenuItem>
-        <MenuItem value="VU">Vanuatu</MenuItem>
-        <MenuItem value="VE">Venezuela, Bolivarian Republic of</MenuItem>
-        <MenuItem value="VN">Viet Nam</MenuItem>
-        <MenuItem value="VG">Virgin Islands, British</MenuItem>
-        <MenuItem value="VI">Virgin Islands, U.S.</MenuItem>
-        <MenuItem value="WF">Wallis and Futuna</MenuItem>
-        <MenuItem value="EH">Western Sahara</MenuItem>
-        <MenuItem value="YE">Yemen</MenuItem>
-        <MenuItem value="ZM">Zambia</MenuItem>
-        <MenuItem value="ZW">Zimbabwe</MenuItem>
-      </Select>
+      <Select
+        label="Country"
+        id="country"
+        name="country"
+        error={touched.country && Boolean(errors.country)}
+        onChange={({ value }) => {
+          setFieldValue('country', value);
+          setFieldTouched('country', true, false);
+        }}
+        value={country ? countries.find(o => o.value === country) : ''}
+        ignoreCase
+        autoBlur
+        options={countries}
+      />
       <Checkbox id="agree" name="agree" error={touched.agree && Boolean(errors.agree)} onChange={change.bind(null, 'agree')} label="agree" checked={agree} />
       <Button type="submit" fullWidth variant="contained" color="primary" disabled={!isValid}>
         Submit

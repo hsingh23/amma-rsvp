@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { Link } from 'react-router-dom';
+import { bulkAdd } from './util';
 
 const styles = {
   root: {
@@ -28,7 +29,7 @@ function ButtonAppBar(props) {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton className={classes.menuButton} color="white" aria-label="Menu">
+          <IconButton className={classes.menuButton} color="white" aria-label="Menu" onClick={bulkAdd}>
             <MenuIcon />
           </IconButton>
           <Link to="/" className={classes.grow}>
