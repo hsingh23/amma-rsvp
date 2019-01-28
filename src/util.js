@@ -5,6 +5,28 @@ export const errorLogger = error => {
   return error;
 };
 
+export const getFormData = (obj, form, namespace) => {
+  var fd = form || [];
+  var formKey;
+
+  for (var property in obj) {
+    if (obj.hasOwnProperty(property)) {
+      formKey = namespace ? `${namespace}[${property}]` : property;
+      if (typeof obj[property] === 'object' && !(obj[property] instanceof File)) {
+        getFormData(obj[property], fd, formKey);
+      } else {
+        fd.push(`${formKey}=${obj[property]}`);
+      }
+    }
+  }
+  return fd.join('&');
+};
+// export const getFormData = object =>
+//   Object.keys(object).reduce((formData, key) => {
+//     formData.append(key, object[key]);
+//     return formData;
+//   }, new FormData());
+
 export const bulkAdd = async () => {
   try {
     const pending = (await localforage.getItem('pendingRSVP')) || [];
@@ -61,16 +83,21 @@ export const bulkAdd = async () => {
       pending.forEach(({ firstName, lastName, email, zipcode, country }) =>
         csv.push([email, firstName, '', lastName, '', '', '', '', '', '', zipcode, country, '', '', 'HTML', 'YES', 'ANY', '', 'Amma RSVP App', 'YES', '', 'YES'])
       );
-      await fetch('https://lists.ammagroups.org/test/dbaccess/api_ajax.php', {
-        body: JSON.stringify({ csv, sessid: localStorage.sessid, func_name: 'bulk_add' }),
-        method: 'POST',
-      })
+      await fetch(
+        'https://lists.ammagroups.org/test/dbaccess/api_ajax.php',
+        {
+          body: getFormData({ csv, sessid: localStorage.sessid, func_name: 'bulk_add' }),
+          method: 'POST',
+          headers: new Headers({ 'content-type': 'application/x-www-form-urlencoded; charset=UTF-8' }),
+        },
+        errorLogger
+      )
         .then(resp => resp.json(), errorLogger)
         .then(resp => {
           if (resp && resp.success === 1) {
             return localforage.setItem('pendingRSVP', []);
           }
-        });
+        }, errorLogger);
     }
   } catch (e) {
     console.error(e);

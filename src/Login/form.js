@@ -6,7 +6,7 @@ import LockIcon from '@material-ui/icons/Lock';
 import EmailIcon from '@material-ui/icons/Email';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withRouter } from 'react-router-dom';
-import { bulkAdd, errorLogger } from '../util';
+import { bulkAdd, errorLogger, getFormData } from '../util';
 
 export const Form = withRouter(props => {
   const {
@@ -30,7 +30,11 @@ export const Form = withRouter(props => {
     <form
       onSubmit={e => {
         e.preventDefault();
-        fetch('https://lists.ammagroups.org/test/login', { body: JSON.stringify({ email, password }), method: 'POST' })
+        fetch('https://lists.ammagroups.org/test/dbaccess/api_ajax.php', {
+          body: getFormData({ email, password, func_name: 'login' }),
+          method: 'POST',
+          headers: new Headers({ 'content-type': 'application/x-www-form-urlencoded; charset=UTF-8' }),
+        })
           .then(resp => resp.json(), errorLogger)
           .then(async resp => {
             const sessid = resp && resp.sessid;
