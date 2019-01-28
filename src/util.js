@@ -25,7 +25,7 @@ export const getFormData = (obj, form, namespace) => {
 export const bulkAdd = async () => {
   try {
     const pending = (await localforage.getItem('pendingRSVP')) || [];
-    if (pending.length > 0 && localStorage.apiKey) {
+    if (pending.length > 0 && localStorage.sessid) {
       const csv = [];
       csv[0] = [
         'DO NOT REMOVE/EDIT top 2 rows (tips and header)',
