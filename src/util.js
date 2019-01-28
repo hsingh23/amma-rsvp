@@ -21,11 +21,6 @@ export const getFormData = (obj, form, namespace) => {
   }
   return fd.join('&');
 };
-// export const getFormData = object =>
-//   Object.keys(object).reduce((formData, key) => {
-//     formData.append(key, object[key]);
-//     return formData;
-//   }, new FormData());
 
 export const bulkAdd = async () => {
   try {
