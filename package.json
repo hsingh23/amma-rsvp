@@ -7,6 +7,7 @@
   "dependencies": {
     "@material-ui/core": "^3.8.3",
     "@material-ui/icons": "^3.0.2",
+    "cra-append-sw": "^2.6.1",
     "formik": "^1.4.2",
     "localforage": "^1.7.3",
     "react": "16.7.0",
@@ -19,7 +20,7 @@
   "devDependencies": {},
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && cra-append-sw -s ./src/custom-sw.js",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
