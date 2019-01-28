@@ -62,7 +62,7 @@ export const bulkAdd = async () => {
         csv.push([email, firstName, '', lastName, '', '', '', '', '', '', zipcode, country, '', '', 'HTML', 'YES', 'ANY', '', 'Amma RSVP App', 'YES', '', 'YES'])
       );
       await fetch('https://lists.ammagroups.org/test/dbaccess/api_ajax.php', {
-        body: JSON.stringify({ csv, api_key: localStorage.apiKey, func_name: 'bulk_add' }),
+        body: JSON.stringify({ csv, sessid: localStorage.sessid, func_name: 'bulk_add' }),
         method: 'POST',
       })
         .then(resp => resp.json(), errorLogger)
