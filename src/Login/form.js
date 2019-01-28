@@ -33,9 +33,9 @@ export const Form = withRouter(props => {
         fetch('https://lists.ammagroups.org/test/login', { body: JSON.stringify({ email, password }), method: 'POST' })
           .then(resp => resp.json(), errorLogger)
           .then(async resp => {
-            const apiKey = resp && resp.apiKey;
-            if (apiKey) {
-              localStorage.apiKey = apiKey;
+            const sessid = resp && resp.sessid;
+            if (sessid) {
+              localStorage.sessid = sessid;
               await bulkAdd();
               resetForm();
               history.push('/');
