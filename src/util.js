@@ -15,7 +15,7 @@ export const getFormData = (obj, form, namespace) => {
       if (typeof obj[property] === 'object' && !(obj[property] instanceof File)) {
         getFormData(obj[property], fd, formKey);
       } else {
-        fd.push(`${formKey}=${obj[property]}`);
+        fd.push(`${formKey}=${encodeURIComponent(obj[property])}`);
       }
     }
   }
