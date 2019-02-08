@@ -15,8 +15,8 @@ localforage.config({
   storeName: 'rsvp',
 });
 
-const EVERY_30_SECONDS = 30 * 1000;
-setInterval(bulkAdd, EVERY_30_SECONDS);
+const EVERY_15_SECONDS = 15 * 1000;
+setInterval(bulkAdd, EVERY_15_SECONDS);
 
 class App extends Component {
   render() {
