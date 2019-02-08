@@ -11,23 +11,24 @@
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.ready.then(registration => {
           registration.unregister();
+          alert('Success');
         });
 
         navigator.serviceWorker.getRegistrations().then(function(registrations) {
           for (let registration of registrations) {
             registration.unregister();
+            alert('Success');
           }
         });
       }
       localStorage.reset = 1;
       setTimeout(() => {
-        window.location.replace('index.html');
+        window.location.replace('/');
       }, 5000);
     </script>
     <h1>Reset RSVP</h1>
     <p>
       <b>The site will redirect back to the main site in 5 seconds.</b>
-      Cleared serviceWorkers
     </p>
   </body>
 </html>
