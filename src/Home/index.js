@@ -18,8 +18,12 @@ const validationSchema = Yup.object({
   email: Yup.string('Enter your email')
     .email('Enter a valid email')
     .required('Email is required'),
-  firstName: Yup.string('Enter your First Name').required('First Name is required'),
-  lastName: Yup.string('Enter your Last Name').required('Last Name is required'),
+  firstName: Yup.string('Enter your First Name')
+    .required('First Name is required')
+    .matches(/^[A-z`'"]+$/, { message: 'Letters only please' }),
+  lastName: Yup.string('Enter your Last Name')
+    .required('Last Name is required')
+    .matches(/^[A-z`'"]+$/, { message: 'Letters only please' }),
   zipcode: Yup.string('Enter your Zipcode').required('Zipcode is required'),
   country: Yup.string('Enter your Country').required('Country is required'),
   agree: Yup.boolean().oneOf([true], 'Must Accept Terms and Conditions'),
