@@ -17,8 +17,8 @@ import localforage from 'localforage';
 import { bulkAdd } from '../util';
 
 const countries = [
-  { value: 'US', label: 'United States' },
-  { value: 'CA', label: 'Canada' },
+  { value: 'USA', label: 'United States' },
+  { value: 'CAN', label: 'Canada' },
   { value: 'AF', label: 'Afghanistan' },
   { value: 'AX', label: 'Åland Islands' },
   { value: 'AL', label: 'Albania' },

@@ -76,7 +76,30 @@ export const bulkAdd = async () => {
         'auto_add_to_groups',
       ];
       pending.forEach(({ firstName, lastName, email, zipcode, country }) =>
-        csv.push([email, firstName, '', lastName, '', '', '', '', '', '', zipcode, country, '', '', 'HTML', 'YES', 'ANY', '', 'Amma RSVP App', 'YES', '', 'YES'])
+        csv.push([
+          email, // 'email',
+          firstName, // 'first_name',
+          '', // 'middle_name',
+          lastName, // 'last_name',
+          '', // 'spiritual_name',
+          '', // 'other_members',
+          '', // 'address',
+          '', // 'city',
+          '', // 'state_short',
+          zipcode, // postal_code',
+          country, // 'country_abbrev',
+          '', // 'home_phone',
+          '', // 'work_phone',
+          '', // 'mobile_phone',
+          'HTML', // 'email_format',
+          'YES', // 'receive_email',
+          'ANY', // 'email_frequency',
+          '', // 'year_met_mother',
+          'Amma RSVP App', // 'source',
+          'YES', // 'receive_letter',
+          '', // 'comments_by_admin',
+          'YES' // 'auto_add_to_groups',
+        ])
       );
       await fetch(
         'https://lists.ammagroups.org/test/dbaccess/api_ajax.php',
