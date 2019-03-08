@@ -413,7 +413,7 @@ export const Form = props => {
       <FormGroup row>
         <FormControlLabel
           control={<Checkbox id="agree" name="agree" error={touched.agree && Boolean(errors.agree)} onChange={change.bind(null, 'agree')} checked={agree} />}
-          label="I agree to recieve email communication from Amma Groups site"
+          label="I agree to receive email communication from Amma Groups"
         />
       </FormGroup>
       <Button type="submit" fullWidth variant="contained" color="primary" disabled={!isValid}>
