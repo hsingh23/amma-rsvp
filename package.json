@@ -21,6 +21,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build && cra-append-sw -s ./src/custom-sw.js",
+    "deploy": "yarn run build && ./.deploy.sh",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
