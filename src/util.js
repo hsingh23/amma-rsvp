@@ -98,11 +98,11 @@ export const bulkAdd = async () => {
           'Amma RSVP App', // 'source',
           'YES', // 'receive_letter',
           '', // 'comments_by_admin',
-          'YES' // 'auto_add_to_groups',
+          'YES', // 'auto_add_to_groups',
         ])
       );
       await fetch(
-        'https://lists.ammagroups.org/test/dbaccess/api_ajax.php',
+        'https://lists.ammagroups.org/dbaccess/api_ajax.php',
         {
           body: getFormData({ csv, sessid: localStorage.sessid, func_name: 'bulk_add' }),
           method: 'POST',

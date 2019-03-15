@@ -3,14 +3,14 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import LockIcon from '@material-ui/icons/Lock';
-import EmailIcon from '@material-ui/icons/Email';
+// import EmailIcon from '@material-ui/icons/Email';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withRouter } from 'react-router-dom';
 import { bulkAdd, errorLogger, getFormData } from '../util';
 
 export const Form = withRouter(props => {
   const {
-    values: { email, password },
+    values: { password },
     errors,
     touched,
     handleChange,
@@ -30,8 +30,8 @@ export const Form = withRouter(props => {
     <form
       onSubmit={e => {
         e.preventDefault();
-        fetch('https://lists.ammagroups.org/test/dbaccess/api_ajax.php', {
-          body: getFormData({ email, password, func_name: 'login' }),
+        fetch('https://lists.ammagroups.org/dbaccess/api_ajax.php', {
+          body: getFormData({ email: 'RSVPADMIN@AMMAGROUPS.ORG', password, func_name: 'login' }),
           method: 'POST',
           headers: new Headers({ 'content-type': 'application/x-www-form-urlencoded; charset=UTF-8' }),
         })
@@ -47,7 +47,7 @@ export const Form = withRouter(props => {
           }, errorLogger);
       }}>
       <CssBaseline />
-      <TextField
+      {/* <TextField
         id="email"
         name="email"
         helperText={touched.email ? errors.email : ''}
@@ -63,7 +63,7 @@ export const Form = withRouter(props => {
             </InputAdornment>
           ),
         }}
-      />
+      /> */}
       <TextField
         id="password"
         name="password"
