@@ -380,7 +380,7 @@ export const Form = props => {
         name="zipcode"
         helperText={touched.zipcode ? errors.zipcode : ''}
         error={touched.zipcode && Boolean(errors.zipcode)}
-        label="Zipcode"
+        label="Zip/Postal code"
         fullWidth
         type="text"
         value={zipcode}
