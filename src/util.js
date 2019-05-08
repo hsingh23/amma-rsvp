@@ -1,5 +1,5 @@
 import localforage from 'localforage';
-
+import {doLogin} from './Login/form'
 export const errorLogger = error => {
   console.error(error);
   return error;
@@ -114,6 +114,8 @@ export const bulkAdd = async () => {
         .then(resp => {
           if (resp && resp.success === 1) {
             return localforage.setItem('pendingRSVP', []);
+          } else if (resp && resp.success === 0 && resp.error_msg === "Admin must log in first" && localStorage.password) {
+            doLogin(localStorage.password).then(bulkAdd);
           }
         }, errorLogger);
     }
