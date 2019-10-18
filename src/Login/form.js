@@ -40,7 +40,7 @@ export const Form = withRouter(props => {
     isValid,
     setFieldTouched,
     resetForm,
-    history
+    history,
   } = props;
 
   const change = (name, e) => {

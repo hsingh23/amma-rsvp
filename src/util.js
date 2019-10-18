@@ -95,7 +95,7 @@ export const bulkAdd = async () => {
           'YES', // 'receive_email',
           'ANY', // 'email_frequency',
           '', // 'year_met_mother',
-          'Amma RSVP App', // 'source',
+          'Amma RSVP App Fall 2019', // 'source',
           'YES', // 'receive_letter',
           '', // 'comments_by_admin',
           'YES', // 'auto_add_to_groups',

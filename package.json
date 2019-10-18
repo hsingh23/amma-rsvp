@@ -10,6 +10,7 @@
     "cra-append-sw": "^2.6.1",
     "formik": "^1.4.2",
     "localforage": "^1.7.3",
+    "notistack": "^0.9.5",
     "react": "16.8.1",
     "react-dom": "16.8.1",
     "react-router-dom": "^4.3.1",

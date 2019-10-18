@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { SnackbarProvider } from 'notistack';
 
 import Login from './Login/index';
 import Home from './Home/index';
@@ -15,6 +16,7 @@ localforage.config({
   storeName: 'rsvp',
 });
 
+
 const EVERY_15_SECONDS = 15 * 1000;
 setInterval(bulkAdd, EVERY_15_SECONDS);
 
@@ -22,6 +24,8 @@ class App extends Component {
   render() {
     return (
       <Router>
+        <SnackbarProvider maxSnack={3}>
+
         <div className="App">
           <Header />
           <div>
@@ -29,6 +33,8 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
           </div>
         </div>
+        </SnackbarProvider>
+
       </Router>
     );
   }
