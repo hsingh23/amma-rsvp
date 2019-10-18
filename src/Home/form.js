@@ -1,5 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import { withSnackbar } from 'notistack';
+
 // import MenuItem from '@material-ui/core/MenuItem';
 // import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
@@ -270,7 +272,7 @@ const countries = [
   { label: 'Zimbabwe', value: 'ZWE' },
 ];
 
-export const Form = props => {
+export const Form = withSnackbar(props => {
   const {
     values: { firstName, lastName, email, zipcode, country, agree },
     errors,
@@ -280,7 +282,17 @@ export const Form = props => {
     setFieldTouched,
     resetForm,
     setFieldValue,
+    enqueueSnackbar
   } = props;
+
+  function handleEnter(event) {
+    if (event.keyCode === 13) {
+      const form = event.target.form;
+      const index = Array.prototype.indexOf.call(form, event.target);
+      form.elements[index + 1].focus();
+      event.preventDefault();
+    }
+  }
 
   const change = (name, e) => {
     e.persist();
@@ -295,6 +307,8 @@ export const Form = props => {
       spellCheck="false"
       onSubmit={async e => {
         e.preventDefault();
+        enqueueSnackbar('Thank you!', {variant: 'success', anchorOrigin: { vertical: 'top', horizontal: 'right', }, autoHideDuration: 3000});
+
         const pending = (await localforage.getItem('pendingRSVP')) || [];
         pending.push({
           firstName,
@@ -319,6 +333,7 @@ export const Form = props => {
         error={touched.firstName && Boolean(errors.firstName)}
         label="First Name"
         value={firstName}
+        onKeyDown={handleEnter}
         onChange={change.bind(null, 'firstName')}
         fullWidth
         InputProps={{
@@ -341,6 +356,8 @@ export const Form = props => {
         label="Last Name"
         value={lastName}
         onChange={change.bind(null, 'lastName')}
+        onKeyDown={handleEnter}
+
         fullWidth
         InputProps={{
           startAdornment: (
@@ -358,6 +375,7 @@ export const Form = props => {
         id="email"
         name="email"
         helperText={touched.email ? errors.email : ''}
+        onKeyDown={handleEnter}
         error={touched.email && Boolean(errors.email)}
         label="Email"
         fullWidth
@@ -382,6 +400,7 @@ export const Form = props => {
         error={touched.zipcode && Boolean(errors.zipcode)}
         label="Zip/Postal code"
         fullWidth
+        onKeyDown={handleEnter}
         type="text"
         value={zipcode}
         onChange={change.bind(null, 'zipcode')}
@@ -419,6 +438,7 @@ export const Form = props => {
       <Button type="submit" fullWidth variant="contained" color="primary" disabled={!isValid}>
         Submit
       </Button>
+      
     </form>
   );
-};
+});
