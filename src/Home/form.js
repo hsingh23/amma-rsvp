@@ -1,6 +1,8 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import { withSnackbar } from 'notistack';
+import { makeStyles } from '@material-ui/core/styles';
+
 
 // import MenuItem from '@material-ui/core/MenuItem';
 // import Select from '@material-ui/core/Select';
@@ -272,6 +274,12 @@ const countries = [
   { label: 'Zimbabwe', value: 'ZWE' },
 ];
 
+const useStyles = makeStyles({
+  textField: {
+    marginTop: '1.5em'
+  },
+});
+
 export const Form = withSnackbar(props => {
   const {
     values: { firstName, lastName, email, zipcode, country, agree },
@@ -284,6 +292,8 @@ export const Form = withSnackbar(props => {
     setFieldValue,
     enqueueSnackbar
   } = props;
+  const classes = useStyles();
+
 
   function handleEnter(event) {
     if (event.keyCode === 13) {
@@ -323,6 +333,7 @@ export const Form = withSnackbar(props => {
       }}>
       <CssBaseline />
       <TextField
+        className={classes.textField}
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="none"
@@ -345,6 +356,7 @@ export const Form = withSnackbar(props => {
         }}
       />
       <TextField
+        className={classes.textField}
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="none"
@@ -355,9 +367,8 @@ export const Form = withSnackbar(props => {
         error={touched.lastName && Boolean(errors.lastName)}
         label="Last Name"
         value={lastName}
-        onChange={change.bind(null, 'lastName')}
         onKeyDown={handleEnter}
-
+        onChange={change.bind(null, 'lastName')}
         fullWidth
         InputProps={{
           startAdornment: (
@@ -368,6 +379,7 @@ export const Form = withSnackbar(props => {
         }}
       />
       <TextField
+        className={classes.textField}
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="none"
@@ -390,6 +402,7 @@ export const Form = withSnackbar(props => {
         }}
       />
       <TextField
+        className={classes.textField}
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="none"
