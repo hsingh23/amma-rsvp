@@ -1,5 +1,5 @@
 // @ts-ignore
-workbox.skipWaiting();
+workbox.core.skipWaiting();
 
 // @ts-ignore
-workbox.clientsClaim();
+workbox.core.clientsClaim();
