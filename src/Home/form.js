@@ -21,6 +21,7 @@ import localforage from 'localforage';
 import { bulkAdd } from '../util';
 
 const countries = [
+  { label: 'Select a country', value: null },
   { label: 'United States (USA)', value: 'USA' },
   { label: 'Canada', value: 'CAN' },
   { label: 'Mexico', value: 'MEX' },
@@ -426,7 +427,7 @@ export const Form = withSnackbar(props => {
         }}
       />
 
-      <div style={{ margin: '5px 0' }}>
+      <div style={{ margin: '21px 0 10px 0' }}>
         <Select
           label="Country"
           id="country"
@@ -448,7 +449,7 @@ export const Form = withSnackbar(props => {
           label="I agree to receive email communication from Amma Groups"
         />
       </FormGroup>
-      <Button type="submit" fullWidth variant="contained" color="primary" disabled={!isValid}>
+      <Button type="submit" fullWidth variant="contained" color="primary" disabled={!isValid} style={{ margin: '5px 0 10px 0' }}>
         Submit
       </Button>
       
